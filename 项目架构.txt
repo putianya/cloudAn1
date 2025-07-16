@@ -1,0 +1,57 @@
+**说明：根据你的项目结构和依赖，下面分别给出业务架构图和技术架构图的简要描述和示意。**
+
+---
+
+**一、业务架构图**
+
+[用户/前端]
+      ↓
+[ActivityController]
+      ↓
+[ActivityService] <——> [AlogService]
+      ↓
+[ActivityAnalysisMapper]
+      ↓
+[MySQL数据库]
+
+[用户/前端]
+      ↓
+[ActivityController]
+      ↓
+[ActivityService] <——> [AlogService]
+      ↓
+[ActivityAnalysisMapper]
+      ↓
+[MySQL数据库]
+```
+
+---
+
+**二、技术架构图**
+
+- Spring Boot 微服务架构
+- MyBatis 持久层框架
+- Druid 数据源
+- Nacos 注册中心
+- Maven 多模块（`market`、`cloud-core-market`）
+- Lombok 简化实体类
+- MySQL 数据库
+
+**技术组件关系图：**
+
+[Spring Boot]
+   ├─ [Web MVC (Controller)]
+   ├─ [Service 层]
+   ├─ [MyBatis Mapper]
+   │     └─ [Mapper XML]
+   ├─ [Druid 数据源]
+   ├─ [Nacos 注册发现]
+   └─ [MySQL 数据库]
+---
+
+**总结：**
+
+- 业务架构：标准的三层架构（Controller → Service → Mapper → DB），服务间通过接口调用。
+- 技术架构：Spring Boot + MyBatis + Druid + Nacos + MySQL，采用Maven多模块组织，支持微服务注册与发现。
+
+如需可视化图形，可用 PowerPoint、ProcessOn 或 draw.io 按上述结构绘制。
