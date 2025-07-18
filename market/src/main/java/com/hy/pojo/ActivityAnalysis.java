@@ -9,6 +9,17 @@ public class ActivityAnalysis {
     //存放算法指标
     private Alog alog;
 
+    //存放的指标差值
+    private AlogDiff alogDiff;
+
+    public AlogDiff getAlogDiff() {
+        return alogDiff;
+    }
+
+    public void setAlogDiff(AlogDiff alogDiff) {
+        this.alogDiff = alogDiff;
+    }
+
     public Alog getAlog() {
         return alog;
     }
@@ -16,6 +27,8 @@ public class ActivityAnalysis {
     public void setAlog(Alog alog) {
         this.alog = alog;
     }
+
+
 
     private String campaignId;
 

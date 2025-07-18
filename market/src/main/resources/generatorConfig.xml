@@ -47,7 +47,7 @@
 
         <!--  设定反向生成的表 -->
         <!--<table tableName="user"></table>-->
-        <table tableName="activity_analysis"></table>
+        <table tableName="activity_media_slot_analysis"></table>
         <!-- <table tableName="user_role"></table>-->
 
     </context>

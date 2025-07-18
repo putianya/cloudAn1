@@ -1,10 +1,9 @@
 package com.hy.mapper;
 
-import com.hy.pojo.ActivityAnalysis;
-import com.hy.pojo.ActivityAnalysisExample;
+import com.hy.pojo.*;
+
 import java.util.List;
 
-import com.hy.pojo.Alog;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActivityAnalysisMapper {
@@ -29,4 +28,12 @@ public interface ActivityAnalysisMapper {
     ActivityAnalysis selectAnByCid(@Param("cid") String cid);
 
     List<ActivityAnalysis> findNewAnList();
+
+    AlogAvg getAlogAvg(@Param("cid") String cid);
+
+    List<ConversionIncome> getConversionIncome(@Param("cid") String cid);
+
+    ConversionIncome findConversionIncomeAvg();
+
+    ConversionIncome findConversionIncomeAvgUser();
 }

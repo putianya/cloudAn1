@@ -16,7 +16,7 @@ public class Alog {
     private BigDecimal nmcRate;//月活会员贡献率=月活会员数/周期月活人数
     private BigDecimal nmcGmvRate;//月活会员GMV贡献率=月活会员GMV/周期月活GMV
     private BigDecimal pcmaGmv;//活动期人均月活GMV=月活会员GMV/月活会员数
-    private BigDecimal mpcmaGmV;//次月人均月活GMV=次月月活会员GMV/次月月活会员数
+    private BigDecimal mpcmaGmv;//次月人均月活GMV=次月月活会员GMV/次月月活会员数
     private BigDecimal pcnGmv;//活动期人均拉新GMV=拉新会员GMV/拉新会员数
     private BigDecimal panGmv;//次月人均拉新GMV=次月拉新会员GMV/次月拉新会员数
     private BigDecimal masmRate;//月活次月留存率=次月月活会员数/月活会员数
