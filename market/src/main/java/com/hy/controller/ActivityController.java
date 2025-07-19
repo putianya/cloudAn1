@@ -2,6 +2,7 @@ package com.hy.controller;
 
 import com.hy.pojo.ActivityAnalysis;
 import com.hy.pojo.ConversionIncome;
+import com.hy.pojo.MediaSlot;
 import com.hy.result.ContentResult;
 import com.hy.result.Result;
 import com.hy.service.ActivityMediaSlotAnalysisService;
@@ -71,5 +72,20 @@ public class ActivityController {
         return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, list);
 
     }
+
+    //查询当前活动下全部的媒介归因排名
+        @GetMapping("/findMediaSlotRJX")
+    public Result findMediaSlot (String cid,String point,String orderfield,String ordertype) {
+        List<MediaSlot> list=activityMediaSlotAnalysisService.findMediaSlot(cid,point,orderfield,ordertype);
+        return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, list);
+        }
+
+
+    //媒介归因排名下载
+    @GetMapping("/mediaSlotDownRJX")
+    public void mediaSlotDown(HttpServletResponse response,String cid,String point,String orderfield,String ordertype) throws IOException {
+        activityMediaSlotAnalysisService.mediaSlotDown(response,cid,point,orderfield,ordertype);
+    }
+
 
 }
