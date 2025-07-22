@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hy.mapper.ActivityKolGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.hy.pojo.ActivityKolGroup" >
+    <result column="campaign_name" property="campaignName" jdbcType="VARCHAR" />
+    <result column="kol_name" property="kolName" jdbcType="VARCHAR" />
+    <result column="post_url" property="postUrl" jdbcType="VARCHAR" />
+    <result column="media" property="media" jdbcType="VARCHAR" />
+    <result column="post_date" property="postDate" jdbcType="TIMESTAMP" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="exposure_count" property="exposureCount" jdbcType="BIGINT" />
+    <result column="exposure_user_count" property="exposureUserCount" jdbcType="BIGINT" />
+    <result column="avg_impression_frequency" property="avgImpressionFrequency" jdbcType="DECIMAL" />
+    <result column="click_count" property="clickCount" jdbcType="BIGINT" />
+    <result column="click_user_count" property="clickUserCount" jdbcType="BIGINT" />
+    <result column="monthly_active_member_count" property="monthlyActiveMemberCount" jdbcType="BIGINT" />
+    <result column="monthly_active_member_gmv" property="monthlyActiveMemberGmv" jdbcType="DECIMAL" />
+    <result column="new_member_acquisition_count" property="newMemberAcquisitionCount" jdbcType="BIGINT" />
+    <result column="new_member_acquisition_gmv" property="newMemberAcquisitionGmv" jdbcType="DECIMAL" />
+    <result column="next_month_active_member_count" property="nextMonthActiveMemberCount" jdbcType="BIGINT" />
+    <result column="next_month_active_member_gmv" property="nextMonthActiveMemberGmv" jdbcType="DECIMAL" />
+    <result column="next_month_new_member_count" property="nextMonthNewMemberCount" jdbcType="BIGINT" />
+    <result column="next_month_new_member_gmv" property="nextMonthNewMemberGmv" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    campaign_name, kol_name, post_url, media, post_date, cost, exposure_count, exposure_user_count, 
+    avg_impression_frequency, click_count, click_user_count, monthly_active_member_count, 
+    monthly_active_member_gmv, new_member_acquisition_count, new_member_acquisition_gmv, 
+    next_month_active_member_count, next_month_active_member_gmv, next_month_new_member_count, 
+    next_month_new_member_gmv
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hy.pojo.ActivityKolGroupExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from activity_kol_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.hy.pojo.ActivityKolGroupExample" >
+    delete from activity_kol_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hy.pojo.ActivityKolGroup" >
+    insert into activity_kol_group (campaign_name, kol_name, post_url, 
+      media, post_date, cost, 
+      exposure_count, exposure_user_count, avg_impression_frequency, 
+      click_count, click_user_count, monthly_active_member_count, 
+      monthly_active_member_gmv, new_member_acquisition_count, 
+      new_member_acquisition_gmv, next_month_active_member_count, 
+      next_month_active_member_gmv, next_month_new_member_count, 
+      next_month_new_member_gmv)
+    values (#{campaignName,jdbcType=VARCHAR}, #{kolName,jdbcType=VARCHAR}, #{postUrl,jdbcType=VARCHAR}, 
+      #{media,jdbcType=VARCHAR}, #{postDate,jdbcType=TIMESTAMP}, #{cost,jdbcType=DECIMAL}, 
+      #{exposureCount,jdbcType=BIGINT}, #{exposureUserCount,jdbcType=BIGINT}, #{avgImpressionFrequency,jdbcType=DECIMAL}, 
+      #{clickCount,jdbcType=BIGINT}, #{clickUserCount,jdbcType=BIGINT}, #{monthlyActiveMemberCount,jdbcType=BIGINT}, 
+      #{monthlyActiveMemberGmv,jdbcType=DECIMAL}, #{newMemberAcquisitionCount,jdbcType=BIGINT}, 
+      #{newMemberAcquisitionGmv,jdbcType=DECIMAL}, #{nextMonthActiveMemberCount,jdbcType=BIGINT}, 
+      #{nextMonthActiveMemberGmv,jdbcType=DECIMAL}, #{nextMonthNewMemberCount,jdbcType=BIGINT}, 
+      #{nextMonthNewMemberGmv,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hy.pojo.ActivityKolGroup" >
+    insert into activity_kol_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="campaignName != null" >
+        campaign_name,
+      </if>
+      <if test="kolName != null" >
+        kol_name,
+      </if>
+      <if test="postUrl != null" >
+        post_url,
+      </if>
+      <if test="media != null" >
+        media,
+      </if>
+      <if test="postDate != null" >
+        post_date,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="exposureCount != null" >
+        exposure_count,
+      </if>
+      <if test="exposureUserCount != null" >
+        exposure_user_count,
+      </if>
+      <if test="avgImpressionFrequency != null" >
+        avg_impression_frequency,
+      </if>
+      <if test="clickCount != null" >
+        click_count,
+      </if>
+      <if test="clickUserCount != null" >
+        click_user_count,
+      </if>
+      <if test="monthlyActiveMemberCount != null" >
+        monthly_active_member_count,
+      </if>
+      <if test="monthlyActiveMemberGmv != null" >
+        monthly_active_member_gmv,
+      </if>
+      <if test="newMemberAcquisitionCount != null" >
+        new_member_acquisition_count,
+      </if>
+      <if test="newMemberAcquisitionGmv != null" >
+        new_member_acquisition_gmv,
+      </if>
+      <if test="nextMonthActiveMemberCount != null" >
+        next_month_active_member_count,
+      </if>
+      <if test="nextMonthActiveMemberGmv != null" >
+        next_month_active_member_gmv,
+      </if>
+      <if test="nextMonthNewMemberCount != null" >
+        next_month_new_member_count,
+      </if>
+      <if test="nextMonthNewMemberGmv != null" >
+        next_month_new_member_gmv,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="campaignName != null" >
+        #{campaignName,jdbcType=VARCHAR},
+      </if>
+      <if test="kolName != null" >
+        #{kolName,jdbcType=VARCHAR},
+      </if>
+      <if test="postUrl != null" >
+        #{postUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="media != null" >
+        #{media,jdbcType=VARCHAR},
+      </if>
+      <if test="postDate != null" >
+        #{postDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="exposureCount != null" >
+        #{exposureCount,jdbcType=BIGINT},
+      </if>
+      <if test="exposureUserCount != null" >
+        #{exposureUserCount,jdbcType=BIGINT},
+      </if>
+      <if test="avgImpressionFrequency != null" >
+        #{avgImpressionFrequency,jdbcType=DECIMAL},
+      </if>
+      <if test="clickCount != null" >
+        #{clickCount,jdbcType=BIGINT},
+      </if>
+      <if test="clickUserCount != null" >
+        #{clickUserCount,jdbcType=BIGINT},
+      </if>
+      <if test="monthlyActiveMemberCount != null" >
+        #{monthlyActiveMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="monthlyActiveMemberGmv != null" >
+        #{monthlyActiveMemberGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="newMemberAcquisitionCount != null" >
+        #{newMemberAcquisitionCount,jdbcType=BIGINT},
+      </if>
+      <if test="newMemberAcquisitionGmv != null" >
+        #{newMemberAcquisitionGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="nextMonthActiveMemberCount != null" >
+        #{nextMonthActiveMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="nextMonthActiveMemberGmv != null" >
+        #{nextMonthActiveMemberGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="nextMonthNewMemberCount != null" >
+        #{nextMonthNewMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="nextMonthNewMemberGmv != null" >
+        #{nextMonthNewMemberGmv,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hy.pojo.ActivityKolGroupExample" resultType="java.lang.Integer" >
+    select count(*) from activity_kol_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update activity_kol_group
+    <set >
+      <if test="record.campaignName != null" >
+        campaign_name = #{record.campaignName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kolName != null" >
+        kol_name = #{record.kolName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postUrl != null" >
+        post_url = #{record.postUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.media != null" >
+        media = #{record.media,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postDate != null" >
+        post_date = #{record.postDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.cost != null" >
+        cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.exposureCount != null" >
+        exposure_count = #{record.exposureCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.exposureUserCount != null" >
+        exposure_user_count = #{record.exposureUserCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.avgImpressionFrequency != null" >
+        avg_impression_frequency = #{record.avgImpressionFrequency,jdbcType=DECIMAL},
+      </if>
+      <if test="record.clickCount != null" >
+        click_count = #{record.clickCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.clickUserCount != null" >
+        click_user_count = #{record.clickUserCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.monthlyActiveMemberCount != null" >
+        monthly_active_member_count = #{record.monthlyActiveMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.monthlyActiveMemberGmv != null" >
+        monthly_active_member_gmv = #{record.monthlyActiveMemberGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newMemberAcquisitionCount != null" >
+        new_member_acquisition_count = #{record.newMemberAcquisitionCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.newMemberAcquisitionGmv != null" >
+        new_member_acquisition_gmv = #{record.newMemberAcquisitionGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="record.nextMonthActiveMemberCount != null" >
+        next_month_active_member_count = #{record.nextMonthActiveMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.nextMonthActiveMemberGmv != null" >
+        next_month_active_member_gmv = #{record.nextMonthActiveMemberGmv,jdbcType=DECIMAL},
+      </if>
+      <if test="record.nextMonthNewMemberCount != null" >
+        next_month_new_member_count = #{record.nextMonthNewMemberCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.nextMonthNewMemberGmv != null" >
+        next_month_new_member_gmv = #{record.nextMonthNewMemberGmv,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update activity_kol_group
+    set campaign_name = #{record.campaignName,jdbcType=VARCHAR},
+      kol_name = #{record.kolName,jdbcType=VARCHAR},
+      post_url = #{record.postUrl,jdbcType=VARCHAR},
+      media = #{record.media,jdbcType=VARCHAR},
+      post_date = #{record.postDate,jdbcType=TIMESTAMP},
+      cost = #{record.cost,jdbcType=DECIMAL},
+      exposure_count = #{record.exposureCount,jdbcType=BIGINT},
+      exposure_user_count = #{record.exposureUserCount,jdbcType=BIGINT},
+      avg_impression_frequency = #{record.avgImpressionFrequency,jdbcType=DECIMAL},
+      click_count = #{record.clickCount,jdbcType=BIGINT},
+      click_user_count = #{record.clickUserCount,jdbcType=BIGINT},
+      monthly_active_member_count = #{record.monthlyActiveMemberCount,jdbcType=BIGINT},
+      monthly_active_member_gmv = #{record.monthlyActiveMemberGmv,jdbcType=DECIMAL},
+      new_member_acquisition_count = #{record.newMemberAcquisitionCount,jdbcType=BIGINT},
+      new_member_acquisition_gmv = #{record.newMemberAcquisitionGmv,jdbcType=DECIMAL},
+      next_month_active_member_count = #{record.nextMonthActiveMemberCount,jdbcType=BIGINT},
+      next_month_active_member_gmv = #{record.nextMonthActiveMemberGmv,jdbcType=DECIMAL},
+      next_month_new_member_count = #{record.nextMonthNewMemberCount,jdbcType=BIGINT},
+      next_month_new_member_gmv = #{record.nextMonthNewMemberGmv,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

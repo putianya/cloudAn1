@@ -1,14 +1,16 @@
 package com.hy.controller;
 
-import com.hy.pojo.ActivityAnalysis;
-import com.hy.pojo.ConversionIncome;
-import com.hy.pojo.MediaSlot;
+import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
+import com.hy.pojo.*;
 import com.hy.result.ContentResult;
+import com.hy.result.PageResult;
+import com.hy.result.PageResultQuery;
 import com.hy.result.Result;
-import com.hy.service.ActivityMediaSlotAnalysisService;
-import com.hy.service.ActivityService;
+import com.hy.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +24,16 @@ public class ActivityController {
     private ActivityService activityService;
     @Autowired
     private ActivityMediaSlotAnalysisService activityMediaSlotAnalysisService;
+    @Autowired
+    private ActivityGroupService activityGroupService;
+    @Autowired
+    private ActivityPlatformGroupService activityPlatformGroupService;
+    @Autowired
+    private ActivityPlatformContentGroupService activityPlatformContentGroupService;
+    @Autowired
+    private ActivityPlatformContentDirectionGroupService activityPlatformContentDirectionGroupService;
 
+    //查询活动列表
     @GetMapping("/findActivity")
     public Result findActivity(){
        List<ActivityAnalysis> activityAnalyses=   activityService.findActivity();
@@ -75,16 +86,57 @@ public class ActivityController {
 
     //查询当前活动下全部的媒介归因排名
         @GetMapping("/findMediaSlotRJX")
-    public Result findMediaSlot (String cid,String point,String orderfield,String ordertype) {
-        List<MediaSlot> list=activityMediaSlotAnalysisService.findMediaSlot(cid,point,orderfield,ordertype);
+    public Result findMediaSlot (String cid,String point,String orderfield,String ordertype,Integer pageNum,Integer pageSize,String media) {
+            PageResult<MediaSlot> list=activityMediaSlotAnalysisService.findMediaSlot(cid,point,orderfield,ordertype,pageNum,pageSize,media);
         return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, list);
         }
 
 
     //媒介归因排名下载
     @GetMapping("/mediaSlotDownRJX")
-    public void mediaSlotDown(HttpServletResponse response,String cid,String point,String orderfield,String ordertype) throws IOException {
-        activityMediaSlotAnalysisService.mediaSlotDown(response,cid,point,orderfield,ordertype);
+    public void mediaSlotDown(HttpServletResponse response,String cid,String point,String orderfield,String ordertype,Integer pageNum,Integer pageSize,String media) throws IOException {
+        activityMediaSlotAnalysisService.mediaSlotDown(response,cid,point,orderfield,ordertype,pageNum,pageSize,media);
+    }
+
+    //查询所有媒介平台名称
+    @GetMapping("/findAllMediaRJX")
+    public Result findAllMedia() {
+        List<String> list = activityMediaSlotAnalysisService.findAllMedia();
+        return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, list);
+    }
+
+    //kol投放
+    //分活动
+    @GetMapping("/findActivityGroupRJX")
+    public Result findActivityGroup(String cname) {
+       List<ActivityGroup> alog= activityGroupService.findActivityGroup(cname);
+        return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, alog);
+    }
+
+    //分活动分媒介
+    @PostMapping("/findActivityPlatformGroupRJX")
+    public Result findActivityPlatformGroup(@RequestBody PageResultQuery query) {
+        PageResult<ActivityPlatformGroup> activityPlatformGroup= activityPlatformGroupService.findActivityPlatformGroup(query);
+        return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, activityPlatformGroup);
+    }
+
+    //分内容形式
+    @PostMapping("/findActivityPlatformContentGroupRJX")
+    public Result findActivityPlatformContentGroup (@RequestBody PageResultQuery query) {
+       PageResult<ActivityPlatformContentGroup> page=  activityPlatformContentGroupService.findActivityPlatformContentGroup(query);
+        return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, page);
+    }
+    //分内容方向
+    @PostMapping("/findActivityDirectionGroupRJX")
+    public Result findActivityDirectionGroup (@RequestBody PageResultQuery query) {
+           PageResult<ActivityPlatformContentDirectionGroup> list= activityPlatformContentDirectionGroupService.findActivityDirectionGroup(query);
+           return new Result(ContentResult.SUCCESS_CODE, ContentResult.SUCCESS_MESSAGE, list);
+    }
+
+    //分媒介分活动分内容方向下载
+    @PostMapping("/findActivityDirectionGroupDownloadRJX")
+    public void findActivityDirectionGroupDownload(HttpServletResponse response,@RequestBody PageResultQuery query ) throws IOException {
+        activityPlatformContentDirectionGroupService.findActivityDirectionGroupDownload(response, query);
     }
 
 
