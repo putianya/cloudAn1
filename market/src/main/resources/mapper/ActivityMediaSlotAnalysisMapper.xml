@@ -375,19 +375,19 @@
       a.next_month_new_member_count AS nextMonthNewMemberCount,
       a.next_month_new_member_gmv AS nextMonthNewMemberGmv,
 
-           ROUND(a.cost/(select sum(cost) from activity_media_slot_analysis where campaign_id=#{cid}),2) as costAcc,
-           ROUND(a.exposure_count/(select sum(exposure_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as exposureCountAcc,
-           ROUND(a.exposure_user_count/(select sum(exposure_user_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as exposureUserCountAcc,
-           ROUND(a.click_count/(select sum(click_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as clickCountAcc,
-           ROUND(a.click_user_count/(select sum(click_user_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as clickUserCountAcc,
-           ROUND(a.monthly_active_member_count/(select sum(monthly_active_member_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as mamcAcc,
-           ROUND(a.monthly_active_member_gmv/(select sum(monthly_active_member_gmv) from activity_media_slot_analysis where campaign_id=#{cid}),2) as mamgAcc,
-           ROUND(a.new_member_acquisition_count/(select sum(new_member_acquisition_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmacAcc,
-           ROUND(a.new_member_acquisition_gmv/(select sum(new_member_acquisition_gmv) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmagAcc,
-           ROUND(a.next_month_active_member_count/(select sum(next_month_active_member_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmnmcaAcc,
-           ROUND(a.next_month_active_member_count/(select sum(next_month_active_member_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmamgAcc,
-           ROUND(a.next_month_new_member_count/(select sum(next_month_new_member_count) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmnmcAcc,
-           ROUND(a.next_month_new_member_gmv/(select sum(next_month_new_member_gmv) from activity_media_slot_analysis where campaign_id=#{cid}),2) as nmnmgAcc,
+           ROUND(a.cost/(select sum(cost) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as costAcc,
+           ROUND(a.exposure_count/(select sum(exposure_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as exposureCountAcc,
+           ROUND(a.exposure_user_count/(select sum(exposure_user_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as exposureUserCountAcc,
+           ROUND(a.click_count/(select sum(click_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as clickCountAcc,
+           ROUND(a.click_user_count/(select sum(click_user_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as clickUserCountAcc,
+           ROUND(a.monthly_active_member_count/(select sum(monthly_active_member_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as mamcAcc,
+           ROUND(a.monthly_active_member_gmv/(select sum(monthly_active_member_gmv) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as mamgAcc,
+           ROUND(a.new_member_acquisition_count/(select sum(new_member_acquisition_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmacAcc,
+           ROUND(a.new_member_acquisition_gmv/(select sum(new_member_acquisition_gmv) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmagAcc,
+           ROUND(a.next_month_active_member_count/(select sum(next_month_active_member_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmnmcaAcc,
+           ROUND(a.next_month_active_member_count/(select sum(next_month_active_member_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmamgAcc,
+           ROUND(a.next_month_new_member_count/(select sum(next_month_new_member_count) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmnmcAcc,
+           ROUND(a.next_month_new_member_gmv/(select sum(next_month_new_member_gmv) from activity_media_slot_analysis where campaign_id=#{slot.cid}),2) as nmnmgAcc,
 
            ROUND(a.cost/a.exposure_count*1000, 2) AS cpm,
            ROUND(a.monthly_active_member_gmv/a.cost, 2) AS roi,
@@ -436,30 +436,238 @@
            ROUND(a.next_month_new_member_gmv/a.next_month_new_member_count, 2) - ROUND((SELECT AVG(next_month_new_member_gmv/next_month_new_member_count) FROM activity_media_slot_analysis WHERE a.media=media AND a.contact_point=contact_point), 2) AS panGmvDiff,
            ROUND(a.next_month_active_member_count/a.monthly_active_member_count, 2) - ROUND((SELECT AVG(next_month_active_member_count/a.monthly_active_member_count) FROM activity_media_slot_analysis WHERE a.media=media AND a.contact_point=contact_point), 2) AS masmRateDiff,
            ROUND(a.next_month_new_member_count/a.new_member_acquisition_count, 2) - ROUND((SELECT AVG(next_month_new_member_count/a.new_member_acquisition_count) FROM activity_media_slot_analysis WHERE a.media=media AND a.contact_point=contact_point), 2) AS mrrRateDiff
-    FROM activity_media_slot_analysis a,activity_analysis b WHERE a.campaign_id =#{cid} and a.campaign_id=b.campaign_id
-    <if test="point != ''">
-      and a.contact_point=#{point}
+    FROM activity_media_slot_analysis a,activity_analysis b WHERE a.campaign_id =#{slot.cid} and a.campaign_id=b.campaign_id
+
+
+  <if test="slot.point != '' and slot.point != null">
+      and a.contact_point=#{slot.point}
     </if>
 
-    <if test="media != null">
-        and a.media=#{media}
+    <if test="slot.media != null and slot.media != ''">
+        and a.media=#{slot.media}
     </if>
 
     <choose>
-      <when test="orderfield != null and orderfield != ''">
-        ORDER BY ${orderfield} ${ordertype}
+      <when test="slot.orderfield != null and slot.orderfield != ''">
+        ORDER BY ${slot.orderfield} ${slot.ordertype}
       </when>
       <otherwise>
         ORDER BY cost desc
       </otherwise>
     </choose>
-
-
-
     </select>
 
       <select id="findAllMedia" resultType="String">
          select media from activity_media_slot_analysis group by media;
       </select>
+  <select id="platformDeliveryComparison" resultType="com.hy.pojo.PlatBean">
+    SELECT
+      SUM(${filed}) as filed,
+      media as media,
+      a.campaign_id as cid,
+      a.campaign_name as cname
+    FROM
+      activity_media_slot_analysis a
+    WHERE
+      a.campaign_id IN${filed} (#{cidA},#{cidB})
+    GROUP BY
+      a.media,a.campaign_id
+    ORDER BY
+      a.campaign_id
+  </select>
+  <select id="distributionOfSubMediaPlatforms" resultType="com.hy.pojo.PlatBean">
+    SELECT
+    <if test="filed != null and filed == 'cost'">
+      SUM(a.cost) AS filed,
+    </if>
+    <if test="filed != null and filed == 'exposureCount'">
+      SUM(a.exposure_count) AS filed,
+    </if>
+   <if test="filed != null and filed == 'exposureUserCount'">
+        SUM(a.exposure_user_count) AS filed,
+   </if>
+   <if test="filed != null and filed == 'clickCount'">
+      SUM(a.click_count) AS filed,
+   </if>
+    <if test="filed != null and filed == 'clickUserCount'">
+      SUM(a.click_user_count) AS filed,
+      </if>
+    <if test="filed != null and filed == 'monthlyActiveMemberCount'">
+      SUM(a.monthly_active_member_count) AS filed,
+      </if>
+      <if test="filed != null and filed == 'monthlyActiveMemberGmv'">
+      SUM(a.monthly_active_member_gmv) AS filed,
+      </if>
+
+      <if test="filed != null and filed == 'newMemberAcquisitionCount'">
+        SUM(a.new_member_acquisition_count) AS filed,
+        </if>
+      <if test="filed != null and filed == 'newMemberAcquisitionGmv'">
+        SUM(a.new_member_acquisition_gmv) AS filed,
+        </if>
+        <if test="filed != null and filed == 'nextMonthActiveMemberCount'">
+        SUM(a.next_month_active_member_count) AS filed,
+        </if>
+        <if test="filed != null and filed == 'nextMonthActiveMemberGmv'">
+        SUM(a.next_month_active_member_gmv) AS filed,
+        </if>
+        <if test="filed != null and filed == 'nextMonthNewMemberCount'">
+            SUM(a.next_month_new_member_count) AS filed,
+        </if>
+            <if test="filed != null and filed == 'nextMonthNewMemberGmv'">
+            SUM(a.next_month_new_member_gmv) AS filed,
+         </if>
+
+  <if test="filed != null and filed == 'cpm'">
+    ROUND(SUM(a.cost/a.exposure_count*1000), 2) AS filed,
+  </if>
+    <if test="filed != null and filed == 'roi'">
+      ROUND(SUM(a.monthly_active_member_gmv/a.cost), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'cac'">
+      ROUND(SUM(a.cost/a.monthly_active_member_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'mamcRate'">
+      ROUND(SUM(a.monthly_active_member_count/b.periodic_monthly_active_user_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'mamcGmvRate'">
+      ROUND(SUM(a.monthly_active_member_gmv/b.periodic_monthly_active_user_gmv), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'rnmRoi'">
+      ROUND(SUM(a.new_member_acquisition_gmv/a.cost), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'rnmCac'">
+      ROUND(SUM(a.cost/a.new_member_acquisition_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nmcRate'">
+      ROUND(SUM(a.new_member_acquisition_count/b.periodic_monthly_active_user_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nmcGmvRate'">
+      ROUND(SUM(a.new_member_acquisition_gmv/b.periodic_monthly_active_user_gmv), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'pcmaGmv'">
+      ROUND(SUM(a.monthly_active_member_gmv/a.monthly_active_member_count), 2) AS filed,
+    </if>
+
+      a.media,
+      a.campaign_id as cid,
+      a.campaign_name as cname
+    FROM
+      activity_media_slot_analysis a left join activity_analysis b
+    on a.campaign_id = b.campaign_id
+    WHERE
+      a.campaign_id IN (#{cidA}, #{cidB})
+    GROUP BY
+      a.media,
+      a.campaign_id
+  </select>
+  <select id="contactTypeComposition" resultType="com.hy.pojo.PlatBean">
+    SELECT
+      sum(${filed}) as filed,
+      media,
+      a.contact_point as point,
+      a.campaign_id as cid,
+      a.campaign_name as cname
+    FROM
+      activity_media_slot_analysis a
+    WHERE
+      a.campaign_id IN (#{cidA}, #{cidB})
+    GROUP BY
+      a.media,
+      a.contact_point,
+      a.campaign_id
+  </select>
+  <select id="contactDistribution" resultType="com.hy.pojo.PlatBean">
+    SELECT
+    <if test="filed != null and filed == 'cost'">
+      SUM(a.cost) AS filed,
+    </if>
+    <if test="filed != null and filed == 'exposureCount'">
+      SUM(a.exposure_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'exposureUserCount'">
+      SUM(a.exposure_user_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'clickCount'">
+      SUM(a.click_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'clickUserCount'">
+      SUM(a.click_user_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'monthlyActiveMemberCount'">
+      SUM(a.monthly_active_member_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'monthlyActiveMemberGmv'">
+      SUM(a.monthly_active_member_gmv) AS filed,
+    </if>
+
+    <if test="filed != null and filed == 'newMemberAcquisitionCount'">
+      SUM(a.new_member_acquisition_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'newMemberAcquisitionGmv'">
+      SUM(a.new_member_acquisition_gmv) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nextMonthActiveMemberCount'">
+      SUM(a.next_month_active_member_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nextMonthActiveMemberGmv'">
+      SUM(a.next_month_active_member_gmv) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nextMonthNewMemberCount'">
+      SUM(a.next_month_new_member_count) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nextMonthNewMemberGmv'">
+      SUM(a.next_month_new_member_gmv) AS filed,
+    </if>
+
+    <if test="filed != null and filed == 'cpm'">
+      ROUND(SUM(a.cost/a.exposure_count*1000), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'roi'">
+      ROUND(SUM(a.monthly_active_member_gmv/a.cost), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'cac'">
+      ROUND(SUM(a.cost/a.monthly_active_member_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'mamcRate'">
+      ROUND(SUM(a.monthly_active_member_count/b.periodic_monthly_active_user_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'mamcGmvRate'">
+      ROUND(SUM(a.monthly_active_member_gmv/b.periodic_monthly_active_user_gmv), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'rnmRoi'">
+      ROUND(SUM(a.new_member_acquisition_gmv/a.cost), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'rnmCac'">
+      ROUND(SUM(a.cost/a.new_member_acquisition_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nmcRate'">
+      ROUND(SUM(a.new_member_acquisition_count/b.periodic_monthly_active_user_count), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'nmcGmvRate'">
+      ROUND(SUM(a.new_member_acquisition_gmv/b.periodic_monthly_active_user_gmv), 2) AS filed,
+    </if>
+    <if test="filed != null and filed == 'pcmaGmv'">
+      ROUND(SUM(a.monthly_active_member_gmv/a.monthly_active_member_count), 2) AS filed,
+    </if>
+
+    a.media,
+    a.campaign_id as cid,
+    a.campaign_name as cname,
+    a.contact_point as point
+    FROM
+    activity_media_slot_analysis a left join activity_analysis b
+    on a.campaign_id = b.campaign_id
+    WHERE
+    a.campaign_id IN (#{cidA}, #{cidB})
+    <if test="media != null and media != ''">
+      AND a.media = #{media}
+    </if>
+
+    GROUP BY
+    a.media,
+    a.campaign_id,
+    a.contact_point
+  </select>
 
 </mapper>

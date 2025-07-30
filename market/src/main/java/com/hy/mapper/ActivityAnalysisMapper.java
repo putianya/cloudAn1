@@ -36,4 +36,6 @@ public interface ActivityAnalysisMapper {
     ConversionIncome findConversionIncomeAvg();
 
     ConversionIncome findConversionIncomeAvgUser();
+
+    List<ActivityAnalysis> findActivityCpm();
 }

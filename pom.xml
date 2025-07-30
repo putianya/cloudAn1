@@ -18,6 +18,7 @@
     <modules>
         <module>market</module>
         <module>cloud-core-market</module>
+        <module>cloud-gateway</module>
     </modules>
 
     <properties>

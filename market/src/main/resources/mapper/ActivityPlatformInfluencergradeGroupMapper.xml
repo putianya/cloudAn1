@@ -19,6 +19,25 @@
     <result column="next_month_active_member_gmv" property="nextMonthActiveMemberGmv" jdbcType="DECIMAL" />
     <result column="next_month_new_member_count" property="nextMonthNewMemberCount" jdbcType="BIGINT" />
     <result column="next_month_new_member_gmv" property="nextMonthNewMemberGmv" jdbcType="DECIMAL" />
+
+
+      <result column="cpm" property="cpm" jdbcType="DECIMAL" />
+      <result column="roi" property="roi" jdbcType="DECIMAL" />
+      <result column="cac" property="cac" jdbcType="DECIMAL" />
+      <result column="mamcRate" property="mamcRate" jdbcType="DECIMAL" />
+      <result column="mamcGmvRate" property="mamcGmvRate" jdbcType="DECIMAL" />
+      <result column="rnmRoi" property="rnmRoi" jdbcType="DECIMAL" />
+      <result column="rnmCac" property="rnmCac" jdbcType="DECIMAL" />
+      <result column="nmcRate" property="nmcRate" jdbcType="DECIMAL" />
+      <result column="nmcGmvRate" property="nmcGmvRate" jdbcType="DECIMAL" />
+      <result column="pcmaGmv" property="pcmaGmv" jdbcType="DECIMAL" />
+      <result column="mpcmaGmv" property="mpcmaGmv" jdbcType="DECIMAL" />
+      <result column="pcnGmv" property="pcnGmv" jdbcType="DECIMAL" />
+      <result column="panGmv" property="panGmv" jdbcType="DECIMAL" />
+      <result column="masmRate" property="masmRate" jdbcType="DECIMAL" />
+      <result column="mrrRate" property="mrrRate" jdbcType="DECIMAL" />
+
+
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -319,4 +338,43 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+
+  <select id="findActivityPlatformInfluencergradeGroup" resultMap="BaseResultMap" resultType="com.hy.pojo.ActivityPlatformInfluencergradeGroup">
+    SELECT *,
+    ROUND(a.cost/a.exposure_count*1000, 2) AS cpm,
+    ROUND(a.monthly_active_member_gmv/a.cost, 2) AS roi,
+    ROUND(a.cost/a.monthly_active_member_count, 2) AS cac,
+    ROUND(a.monthly_active_member_count/b.periodic_monthly_active_user_count, 2) AS mamcRate,
+    ROUND(a.monthly_active_member_gmv/b.periodic_monthly_active_user_gmv, 2) AS mamcGmvRate,
+    ROUND(a.new_member_acquisition_gmv/a.cost, 2) AS rnmRoi,
+    ROUND(a.cost/a.new_member_acquisition_count, 2) AS rnmCac,
+    ROUND(a.new_member_acquisition_count/b.periodic_monthly_active_user_count, 2) AS nmcRate,
+    ROUND(a.new_member_acquisition_gmv/b.periodic_monthly_active_user_gmv, 2) AS nmcGmvRate,
+    ROUND(a.monthly_active_member_gmv/a.monthly_active_member_count, 2) AS pcmaGmv,
+    ROUND(a.next_month_active_member_gmv/a.next_month_active_member_count, 2) AS mpcmaGmv,
+    ROUND(a.new_member_acquisition_gmv/a.new_member_acquisition_count, 2) AS pcnGmv,
+    ROUND(a.next_month_new_member_gmv/a.next_month_new_member_count, 2) AS panGmv,
+    ROUND(a.next_month_active_member_count/a.monthly_active_member_count,2) as masmRate,
+    ROUND(a.next_month_new_member_count/a.new_member_acquisition_count,2) as mrrRate
+
+    FROM activity_platform_influencergrade_group a left join activity_analysis b on a.campaign_name=b.campaign_name
+
+    WHERE 1=1
+    <if test="query.cname != null">
+      AND a.campaign_name  LIKE '%${query.cname}%'
+    </if>
+
+    <if test="query.medias != null and query.medias.size > 0">
+      and media in
+      <foreach collection="query.medias" item="media" open="(" close=")" separator="," >
+        #{media}
+      </foreach>
+    </if>
+    <if test="query.talentLevel!=null and query.talentLevel.size > 0">
+      and talent_level in
+      <foreach collection="query.talentLevel" item="level" open="(" close=")" separator="," >
+        #{level}
+      </foreach>
+    </if>
+  </select>
 </mapper>

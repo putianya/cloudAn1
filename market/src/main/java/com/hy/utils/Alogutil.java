@@ -26,4 +26,28 @@ public class Alogutil {
         diff.setPanGmvDiff(alog.getPanGmv().subtract(alogAvg.getPanGmvAvg()));
         return diff;
     }
+
+    //计算两个活动的计算指标差值
+    public static AlogDiff getAlogDiffTwo(Alog alogA, Alog alogB)
+    {
+        AlogDiff diff = new AlogDiff();
+        diff.setCpmDiff(alogA.getCpm().subtract(alogB.getCpm()));
+        diff.setCacDiff(alogA.getCac().subtract(alogB.getCac()));
+        diff.setRoiDiff(alogA.getRoi().subtract(alogB.getRoi()));
+        diff.setMamcGmvRateDiff(alogA.getMamcGmvRate().subtract(alogB.getMamcGmvRate()));
+        diff.setMamcRateDiff(alogA.getMamcRate().subtract(alogB.getMamcRate()));
+        diff.setMasmRateDiff(alogA.getMasmRate().subtract(alogB.getMasmRate()));
+        diff.setMpcmaGmvDiff(alogA.getMpcmaGmv().subtract(alogB.getMpcmaGmv()));
+        diff.setMrrRateDiff(alogA.getMrrRate().subtract(alogB.getMrrRate()));
+        diff.setNmcGmvRateDiff(alogA.getNmcGmvRate().subtract(alogB.getNmcGmvRate()));
+        diff.setNmcRateDiff(alogA.getNmcRate().subtract(alogB.getNmcRate()));
+        diff.setRnmRoiDiff(alogA.getRnmRoi().subtract(alogB.getRnmRoi()));
+        diff.setRnmCacDiff(alogA.getRnmCac().subtract(alogB.getRnmCac()));
+        diff.setPcmaGmvDiff(alogA.getPcmaGmv().subtract(alogB.getPcmaGmv()));
+        diff.setPcnGmvDiff(alogA.getPcnGmv().subtract(alogB.getPcnGmv()));
+        diff.setPanGmvDiff(alogA.getPanGmv().subtract(alogB.getPanGmv()));
+        return diff;
+    }
+
+
 }

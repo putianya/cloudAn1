@@ -1,15 +1,16 @@
 package com.hy.mapper;
 
-import com.hy.pojo.ActivityAnalysis;
-import com.hy.pojo.ActivityMediaSlotAnalysis;
-import com.hy.pojo.ActivityMediaSlotAnalysisExample;
+import com.hy.pojo.*;
+
 import java.util.List;
 
-import com.hy.pojo.MediaSlot;
 import com.hy.result.PageResult;
+import com.hy.result.ResultMediaSlot;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActivityMediaSlotAnalysisMapper {
+
+
     int countByExample(ActivityMediaSlotAnalysisExample example);
 
     int deleteByExample(ActivityMediaSlotAnalysisExample example);
@@ -26,8 +27,15 @@ public interface ActivityMediaSlotAnalysisMapper {
 
     List<String> findContactPoint();
 
-    List<MediaSlot> findMediaSlot(@Param("cid") String cid, @Param("point") String point,
-                                        @Param("orderfield") String orderfield, @Param("ordertype") String ordertype,@Param("media") String media);
+    List<MediaSlot> findMediaSlot(@Param("slot")ResultMediaSlot slot);
 
     List<String> findAllMedia();
+
+    List<PlatBean> platformDeliveryComparison(@Param("cidA") String cidA, @Param("cidB")String cidB, @Param("filed")String filed);
+
+    List<PlatBean> distributionOfSubMediaPlatforms(@Param("cidA") String cidA, @Param("cidB")String cidB, @Param("filed")String filed);
+
+    List<PlatBean> contactTypeComposition(@Param("cidA") String cidA, @Param("cidB")String cidB, @Param("filed")String filed);
+
+    List<PlatBean> contactDistribution(@Param("cidA") String cidA, @Param("cidB")String cidB, @Param("filed")String filed ,@Param("media") String media);
 }

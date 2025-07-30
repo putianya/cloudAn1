@@ -478,5 +478,8 @@
     FROM
       activity_analysis
   </select>
+    <select id="findActivityCpm" resultMap="BaseResultMap" resultType="com.hy.pojo.ActivityAnalysis">
+      SELECT *,ROUND(cost/exposure_count*1000,2) as cpm FROM activity_analysis
+    </select>
 
 </mapper>

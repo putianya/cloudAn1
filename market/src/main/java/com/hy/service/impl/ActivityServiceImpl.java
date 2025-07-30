@@ -2,7 +2,10 @@ package com.hy.service.impl;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
+import com.hy.exceltemp.ActivityAlogAndDiffExcel;
 import com.hy.exceltemp.ActivityAnalysisExcel;
+import com.hy.exceltemp.ActivityGroupExcel;
 import com.hy.mapper.ActivityAnalysisMapper;
 import com.hy.pojo.*;
 import com.hy.service.ActivityService;
@@ -15,11 +18,11 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.net.URLEncoder;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -155,5 +158,108 @@ public class ActivityServiceImpl implements ActivityService {
                 .doWrite(arr);
     }
 
+    @Override
+    public Map<String, List<String>> findTypeAndCnames() {
+        List<ActivityAnalysis> aa=activityAnalysisMapper.selectByExample(null);
+        //分组提取数据
+        Map<String,List<ActivityAnalysis>> collect=  aa.stream().collect(Collectors.groupingBy((x)->x.getActivityType()));
 
+        HashMap<String,List<String>> map=new HashMap<>();
+
+        collect.forEach((k,v)->{
+            //处理value数据 提取活动名称
+            List<String> l1 = v.stream().map((x) ->{
+               return x.getCampaignName();
+            }).collect(Collectors.toList());
+
+            map.put(k,l1);
+        });
+        return map;
+    }
+
+    @Override
+    public ActivityAlogAndDiff comparisonOfCoreIndicators(String cidA, String cidB) {
+        //组装数据
+        //获取当前两个活动下的基本字段数据
+        ActivityAnalysis a1 = activityAnalysisMapper.selectAnByCid(cidA);
+        ActivityAnalysis a2 = activityAnalysisMapper.selectAnByCid(cidB);
+
+        //获取当前两个活动下的计算指标数据cpm  ctr  roi
+        Alog aa1 = activityAnalysisMapper.getAlog(cidA);
+        Alog aa2 = activityAnalysisMapper.getAlog(cidB);
+
+        a1.setAlog(aa1);
+        a2.setAlog(aa2);
+        //计算两个活动的指标差值
+        AlogDiff diff=Alogutil.getAlogDiffTwo(aa1,aa2);
+        diff.setCostDiff(a1.getCost().subtract(a2.getCost()));
+        diff.setMonitorRateDiff(a1.getMonitorRate().subtract(a2.getMonitorRate()));
+        diff.setExposureCountDiff(a1.getExposureCount() - a2.getExposureCount());
+        diff.setExposureUserCountDiff(a1.getExposureUserCount() - a2.getExposureUserCount());
+        diff.setClickCountDiff(a1.getClickCount() - a2.getClickCount());
+        diff.setClickUserCountDiff(a1.getClickUserCount() - a2.getClickUserCount());
+        diff.setMonthlyActiveMemberCountDiff(a1.getMonthlyActiveMemberCount() - a2.getMonthlyActiveMemberCount());
+        diff.setMonthlyActiveMemberGmvDiff(a1.getMonthlyActiveMemberGmv().subtract(a2.getMonthlyActiveMemberGmv()));
+        diff.setNewMemberAcquisitionCountDiff(a1.getNewMemberAcquisitionCount() - a2.getNewMemberAcquisitionCount());
+        diff.setNewMemberAcquisitionGmvDiff(a1.getNewMemberAcquisitionGmv().subtract(a2.getNewMemberAcquisitionGmv()));
+        diff.setPeriodicMonthlyActiveUserCountDiff(a1.getPeriodicMonthlyActiveUserCount() - a2.getPeriodicMonthlyActiveUserCount());
+        diff.setPeriodicMonthlyActiveUserGmvDiff(a1.getPeriodicMonthlyActiveUserGmv().subtract(a2.getPeriodicMonthlyActiveUserGmv()));
+        diff.setPeriodicNewMemberCountDiff(a1.getPeriodicNewMemberCount() - a2.getPeriodicNewMemberCount());
+        diff.setPeriodicNewMemberGmvDiff(a1.getPeriodicNewMemberGmv().subtract(a2.getPeriodicNewMemberGmv()));
+        diff.setNextMonthActiveMemberCountDiff(a1.getNextMonthActiveMemberCount() - a2.getNextMonthActiveMemberCount());
+        diff.setNextMonthActiveMemberGmvDiff(a1.getNextMonthActiveMemberGmv().subtract(a2.getNextMonthActiveMemberGmv()));
+        diff.setNextMonthNewMemberCountDiff(a1.getNextMonthNewMemberCount() - a2.getNextMonthNewMemberCount());
+        diff.setNextMonthNewMemberGmvDiff(a1.getNextMonthNewMemberGmv().subtract(a2.getNextMonthNewMemberGmv()));
+
+        //组装返回数据
+        ActivityAlogAndDiff ds=new ActivityAlogAndDiff();
+        ds.setActivityAnalysisA(a1);
+        ds.setActivityAnalysisB(a2);
+        ds.setAlogDiff(diff);
+
+        return ds;
+    }
+
+    @Override
+    public void comparisonOfCoreIndicatorsDownload(HttpServletResponse response, String cidA, String cidB) throws IOException {
+        //完成下载逻辑
+        //下载数据
+        ActivityAlogAndDiff ad = comparisonOfCoreIndicators(cidA, cidB);
+
+        //获取每个对象的数据 最终存入模版对象中
+        ActivityAnalysis    a=ad.getActivityAnalysisA();
+        ActivityAnalysis    b=ad.getActivityAnalysisB();
+        AlogDiff            diff=ad.getAlogDiff();
+
+        //拷贝数据
+        ActivityAlogAndDiffExcel exa=new ActivityAlogAndDiffExcel();
+        BeanUtils.copyProperties(a,exa);
+        BeanUtils.copyProperties(diff,exa);
+
+        ActivityAlogAndDiffExcel exb=new ActivityAlogAndDiffExcel();
+        BeanUtils.copyProperties(b,exb);
+        BeanUtils.copyProperties(diff,exb);
+
+        //把两个对象封装到list对象中
+        ArrayList<ActivityAlogAndDiffExcel> adlist=new ArrayList<>();
+        adlist.add(exa);
+        adlist.add(exb);
+
+        //设置文件名
+        String fileName= URLEncoder.encode("核心指标下载"+System.currentTimeMillis(),"UTF-8");
+
+        //设置样式
+        HorizontalCellStyleStrategy horizontalCellStyleStrategy=ExcelUtil.getHorizontalCellStyleStrategy(response,fileName);
+
+        //下载EXcel
+        EasyExcel.write(response.getOutputStream(),ActivityAlogAndDiffExcel.class)
+                .registerWriteHandler(horizontalCellStyleStrategy)
+                .sheet("核心指标")
+                .doWrite(adlist);
+    }
+
+    @Override
+    public List<ActivityAnalysis> findActivityCpm() {
+        return activityAnalysisMapper.findActivityCpm();
+    }
 }

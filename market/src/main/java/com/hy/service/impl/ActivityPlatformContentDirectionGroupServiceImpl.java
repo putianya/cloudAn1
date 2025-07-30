@@ -36,6 +36,7 @@ public class ActivityPlatformContentDirectionGroupServiceImpl implements Activit
 
     @Override
     public void findActivityDirectionGroupDownload(HttpServletResponse response, PageResultQuery query) throws IOException {
+
         PageResult<ActivityPlatformContentDirectionGroup> page   = findActivityDirectionGroup(query);
         //获取PageResult中的数据集合
         List<ActivityPlatformContentDirectionGroup> list = page.getList();
@@ -46,18 +47,12 @@ public class ActivityPlatformContentDirectionGroupServiceImpl implements Activit
             BeanUtils.copyProperties(x, excel);
             extracted(x, excel);
 
-
             return excel;
         }).collect(Collectors.toList());
-
-
-
         //分页逻辑
         String filename = System.currentTimeMillis() + "";
-
         //获取样式信息
         HorizontalCellStyleStrategy horizontalCellStyleStrategy = ExcelUtil.getHorizontalCellStyleStrategy(response, filename);
-
         //发送下载请求
         EasyExcel.write(response.getOutputStream(), ActivityDirectionGroupExcel.class)
                 .registerWriteHandler(horizontalCellStyleStrategy)

@@ -315,8 +315,8 @@
 
     FROM activity_group a ,activity_analysis b WHERE a.campaign_name=b.campaign_name
 
-    <if test="cname != null" >
-      AND a.campaign_name  LIKE '%${cname}%'
+    <if test="query.cname != null" >
+      AND a.campaign_name  LIKE '%${query.cname}%'
     </if>
   </select>
 </mapper>

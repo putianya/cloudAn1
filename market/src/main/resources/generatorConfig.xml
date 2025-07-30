@@ -47,13 +47,13 @@
 
         <!--  设定反向生成的表 -->
         <!--<table tableName="user"></table>-->
-        <table tableName="activity_group"></table>
-        <table tableName="activity_platform_group"></table>
-        <table tableName="activity_platform_content_group"></table>
-        <table tableName="activity_platform_content_direction_group"></table>
-        <table tableName="activity_platform_influencergrade_group"></table>
-        <table tableName="activity_platform_influencertype_group"></table>
-        <table tableName="activity_kol_group"></table>
+        <table tableName="cpm_ex"></table>
+<!--        <table tableName="activity_platform_group"></table>-->
+<!--        <table tableName="activity_platform_content_group"></table>-->
+<!--        <table tableName="activity_platform_content_direction_group"></table>-->
+<!--        <table tableName="activity_platform_influencergrade_group"></table>-->
+<!--        <table tableName="activity_platform_influencertype_group"></table>-->
+<!--        <table tableName="activity_kol_group"></table>-->
         <!-- <table tableName="user_role"></table>-->
 
     </context>

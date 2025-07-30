@@ -3,6 +3,8 @@ package com.hy.mapper;
 import com.hy.pojo.ActivityGroup;
 import com.hy.pojo.ActivityGroupExample;
 import java.util.List;
+
+import com.hy.result.PageResultQuery;
 import org.apache.ibatis.annotations.Param;
 
 public interface ActivityGroupMapper {
@@ -21,5 +23,5 @@ public interface ActivityGroupMapper {
     int updateByExample(@Param("record") ActivityGroup record, @Param("example") ActivityGroupExample example);
 
 
-    List<ActivityGroup> findActivityGroup(@Param("cname") String cname);
+    List<ActivityGroup> findActivityGroup(@Param("query") PageResultQuery query);
 }

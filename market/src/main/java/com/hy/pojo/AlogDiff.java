@@ -3,9 +3,49 @@ package com.hy.pojo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class AlogDiff {
+
+
+    private BigDecimal costDiff;
+
+    private BigDecimal monitorRateDiff;
+
+    private Long exposureCountDiff;
+
+    private Long exposureUserCountDiff;
+
+    private Long clickCountDiff;
+
+    private Long clickUserCountDiff;
+
+    private Long monthlyActiveMemberCountDiff;
+
+    private BigDecimal monthlyActiveMemberGmvDiff;
+
+    private Long newMemberAcquisitionCountDiff;
+
+    private BigDecimal newMemberAcquisitionGmvDiff;
+
+    private Long periodicMonthlyActiveUserCountDiff;
+
+    private BigDecimal periodicMonthlyActiveUserGmvDiff;
+
+    private Long periodicNewMemberCountDiff;
+
+    private BigDecimal periodicNewMemberGmvDiff;
+
+    private Long nextMonthActiveMemberCountDiff;
+
+    private BigDecimal nextMonthActiveMemberGmvDiff;
+
+    private Long nextMonthNewMemberCountDiff;
+
+    private BigDecimal nextMonthNewMemberGmvDiff;
+
+
     private BigDecimal cpmDiff;//CPM=花费/曝光次数*1000
     private BigDecimal roiDiff;//月活会员ROI=（收入-花费）/花费*100%
     private BigDecimal cacDiff;//CAC=花费/新增会员数
