@@ -19,6 +19,8 @@
         <module>market</module>
         <module>cloud-core-market</module>
         <module>cloud-gateway</module>
+        <module>cloud-sso</module>
+        <module>cloud-api-market</module>
     </modules>
 
     <properties>
