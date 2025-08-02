@@ -45,4 +45,9 @@ public class UserServiceImpl implements UserService {
             return null;
 
     }
+
+    @Override
+    public TbUser getUserByUid(Integer uid) {
+        return tbUserMapper.selectByPrimaryKey(uid);
+    }
 }

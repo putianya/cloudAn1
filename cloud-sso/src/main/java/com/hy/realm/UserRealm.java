@@ -6,6 +6,7 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserRealm extends AuthorizingRealm {
@@ -35,7 +36,10 @@ public class UserRealm extends AuthorizingRealm {
             return null;
         }
         //说明user对象存在直接利用shiro校验密码即可
-        SimpleAuthenticationInfo sim = new SimpleAuthenticationInfo(tbUser, tbUser.getPassword(), "userRealm");
+//        SimpleAuthenticationInfo sim = new SimpleAuthenticationInfo(tbUser, tbUser.getPassword(), "userRealm");
+        SimpleAuthenticationInfo sim = new SimpleAuthenticationInfo(tbUser, tbUser.getPassword(), ByteSource.Util.bytes(tbUser.getSalt()), "userRealm");
+
+
         return sim;
     }
 }

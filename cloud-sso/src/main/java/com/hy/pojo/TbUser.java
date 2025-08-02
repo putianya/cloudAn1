@@ -1,5 +1,7 @@
 package com.hy.pojo;
 
+import java.util.List;
+
 public class TbUser {
     private Integer id;
 
@@ -8,6 +10,17 @@ public class TbUser {
     private String password;
 
     private String salt;
+
+    private List<TbDistributor> dis;
+    public List<TbDistributor> getDis() {
+        return dis;
+    }
+
+    public void setDis(List<TbDistributor> dis) {
+        this.dis = dis;
+    }
+
+
 
     public Integer getId() {
         return id;

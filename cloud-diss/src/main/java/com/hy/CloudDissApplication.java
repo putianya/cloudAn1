@@ -7,9 +7,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @MapperScan("com.hy.mapper")
-@EnableFeignClients
-public class CloudSSOApplication {
+public class CloudDissApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CloudSSOApplication.class, args);
+        SpringApplication.run(CloudDissApplication.class, args);
     }
 }

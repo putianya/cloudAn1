@@ -21,6 +21,7 @@
         <module>cloud-gateway</module>
         <module>cloud-sso</module>
         <module>cloud-api-market</module>
+        <module>cloud-diss</module>
     </modules>
 
     <properties>
