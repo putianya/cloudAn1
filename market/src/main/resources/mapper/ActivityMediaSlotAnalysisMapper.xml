@@ -469,7 +469,7 @@
     FROM
       activity_media_slot_analysis a
     WHERE
-      a.campaign_id IN${filed} (#{cidA},#{cidB})
+      a.campaign_id IN (#{cidA},#{cidB})
     GROUP BY
       a.media,a.campaign_id
     ORDER BY

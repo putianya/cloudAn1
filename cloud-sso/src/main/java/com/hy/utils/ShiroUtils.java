@@ -45,7 +45,7 @@ public class ShiroUtils {
 
 
     public static void main(String[] args) {
-        String password = "6666";
+        String password = "1234";
         String salt1 = generateSalt(8);
         System.out.println(salt1);
         String md51 = encryptPassword("md5", password, salt1,7);

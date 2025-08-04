@@ -41,6 +41,9 @@ public class ActivityMediaSlotAnalysisServiceImpl implements ActivityMediaSlotAn
     public PageResult<MediaSlot> findMediaSlot(ResultMediaSlot slot) {
 
         // 使用PageHelper插件进行分页
+        if (slot == null) {
+            throw new IllegalArgumentException("参数 slot 不能为空");
+        }
         PageHelper.startPage(slot.getPageNum(), slot.getPageSize());
         // 调用activityMediaSlotAnalysisMapper的findMediaSlot方法，查询媒体位信息
         List<MediaSlot> mediaSlots = activityMediaSlotAnalysisMapper.findMediaSlot(slot);
