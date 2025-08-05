@@ -8,4 +8,6 @@ public interface UserService {
     TbUser getUserByUsername(String username);
 
     TbUser getUserByUid(Integer uid);
+
+    String order();
 }

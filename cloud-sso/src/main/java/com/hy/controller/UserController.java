@@ -36,4 +36,32 @@ public class UserController {
         return new Result(ContentResult.SUCCESS_CODE,ContentResult.SUCCESS_MESSAGE  ,user);
 
     }
+
+
+    //查询请求
+    @GetMapping("/queryRJX")
+    public String query(){
+        System.out.println("查询成功");
+        String order = userService.order();
+        System.out.println(order);
+        return "查询成功";
+    }
+
+    //支付请求
+    @GetMapping("/payRJX")
+    public String pay(){
+        System.out.println("支付成功");
+        return "支付成功";
+    }
+
+    //订单请求
+    @GetMapping("/orderRJX")
+    public String order(){
+        System.out.println("订单成功");
+        String order = userService.order();
+        System.out.println(order);
+        return "订单成功";
+    }
+
+
 }

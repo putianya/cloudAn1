@@ -1,5 +1,6 @@
 package com.hy.service.impl;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.hy.mapper.TbUserMapper;
 import com.hy.pojo.TbUser;
 import com.hy.pojo.TbUserExample;
@@ -49,5 +50,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public TbUser getUserByUid(Integer uid) {
         return tbUserMapper.selectByPrimaryKey(uid);
+    }
+
+    @Override
+    @SentinelResource("goods")
+    public String order() {
+        return "商品查询成功";
     }
 }
