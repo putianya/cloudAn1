@@ -20,5 +20,8 @@ spring:
       transport:
         dashboard: localhost:4444
       web-context-unify: false
+feign:
+  sentinel:
+    enabled: true
 
 
